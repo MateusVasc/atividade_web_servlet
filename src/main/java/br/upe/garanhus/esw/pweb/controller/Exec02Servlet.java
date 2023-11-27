@@ -1,13 +1,12 @@
-package br.upe.garanhus.esw.pweb.controle;
+package br.upe.garanhus.esw.pweb.controller;
 
-import br.upe.garanhus.esw.pweb.modelo.servicos.ErrorTO;
-import java.io.IOException;
+import br.upe.garanhus.esw.pweb.model.services.ErrorTO;
 import java.io.PrintWriter;
 import java.util.List;
 
 import br.upe.garanhus.esw.pweb.CatException;
-import br.upe.garanhus.esw.pweb.modelo.servicos.CatService;
-import br.upe.garanhus.esw.pweb.modelo.servicos.CatTO;
+import br.upe.garanhus.esw.pweb.model.services.CatService;
+import br.upe.garanhus.esw.pweb.model.services.CatTO;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.servlet.annotation.WebServlet;

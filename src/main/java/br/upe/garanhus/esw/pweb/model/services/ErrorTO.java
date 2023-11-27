@@ -1,4 +1,4 @@
-package br.upe.garanhus.esw.pweb.modelo.servicos;
+package br.upe.garanhus.esw.pweb.model.services;
 
 public class ErrorTO {
   private String error;
