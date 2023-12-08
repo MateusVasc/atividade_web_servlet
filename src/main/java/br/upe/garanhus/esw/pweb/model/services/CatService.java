@@ -25,7 +25,7 @@ public class CatService {
 
 	private static final Jsonb jsonb = JsonbBuilder.create();
 	
-	private HttpClient httpClient = HttpClient.newHttpClient();
+	private final HttpClient httpClient = HttpClient.newHttpClient();
 	private static final Logger logger = Logger.getLogger(CatService.class.getName());
 
 	public List<CatTO> getCatList() {
