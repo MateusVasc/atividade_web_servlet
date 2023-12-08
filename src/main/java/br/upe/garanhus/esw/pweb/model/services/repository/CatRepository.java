@@ -4,7 +4,6 @@ import br.upe.garanhus.esw.pweb.model.services.CatTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class CatRepository {
     this.connectionRepository = new ConnectionRepository();
   }
 
-  public void saveCatList(List<CatTO> catList) throws SQLException, ClassNotFoundException {
+  public void saveCatList(List<CatTO> catList) {
     Connection connection = null;
     PreparedStatement statement = null;
 
@@ -51,7 +50,7 @@ public class CatRepository {
     }
   }
 
-  public CatTO getCat(String id) throws SQLException, ClassNotFoundException {
+  public CatTO getCat(String id) {
     Connection connection = null;
     Statement statement = null;
     ResultSet resultSet = null;
