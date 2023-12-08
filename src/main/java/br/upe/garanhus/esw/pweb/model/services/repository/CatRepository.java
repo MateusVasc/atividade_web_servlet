@@ -3,6 +3,7 @@ package br.upe.garanhus.esw.pweb.model.services.repository;
 import br.upe.garanhus.esw.pweb.model.services.CatTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -15,6 +16,7 @@ public class CatRepository {
 
   private static final String SAVE_CATS_QUERY = "INSERT INTO cats (id, url, width, height) VALUES "
       + "(?, ?, ?, ?)";
+  private static final String GET_CAT_QUERY = "SELECT * FROM cats WHERE id = ";
 
   private final ConnectionRepository connectionRepository;
   private CatTO catTO;
@@ -43,6 +45,28 @@ public class CatRepository {
     connectionRepository.closeConnection(connection);
   }
 
-  public void getCat(String id) {
+  public CatTO getCat(String id) throws SQLException, ClassNotFoundException {
+    Connection connection = null;
+    Statement statement = null;
+    ResultSet resultSet = null;
+
+    connection = connectionRepository.openConnection(DB_NAME,DB_USER,DB_PASSWORD);
+    statement = connection.createStatement();
+    resultSet = statement.executeQuery(GET_CAT_QUERY + id);
+
+    CatTO cat = new CatTO();
+
+    while (resultSet.next()) {
+      cat.setId(resultSet.getString("id"));
+      cat.setUrl(resultSet.getString("url"));
+      cat.setWidth(resultSet.getInt("width"));
+      cat.setHeight(resultSet.getInt("height"));
+    }
+
+    connectionRepository.closeResultSet(resultSet);
+    connectionRepository.closeStatement(statement);
+    connectionRepository.closeConnection(connection);
+
+    return cat;
   }
 }
