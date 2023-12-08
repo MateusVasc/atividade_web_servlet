@@ -29,20 +29,26 @@ public class CatRepository {
     Connection connection = null;
     PreparedStatement statement = null;
 
-    connection = connectionRepository.openConnection(DB_NAME,DB_USER,DB_PASSWORD);
-    statement = connection.prepareStatement(SAVE_CATS_QUERY);
+    try {
+      connection = connectionRepository.openConnection(DB_NAME,DB_USER,DB_PASSWORD);
+      statement = connection.prepareStatement(SAVE_CATS_QUERY);
 
-    for (CatTO cat : catList) {
-      statement.setString(1,cat.getId());
-      statement.setString(2,cat.getUrl());
-      statement.setInt(3,cat.getWidth());
-      statement.setInt(4,cat.getHeight());
+      for (CatTO cat : catList) {
+        statement.setString(1,cat.getId());
+        statement.setString(2,cat.getUrl());
+        statement.setInt(3,cat.getWidth());
+        statement.setInt(4,cat.getHeight());
 
-      statement.executeUpdate();
+        statement.executeUpdate();
+      }
+
+    } catch (Exception e) {
+      this.handleError(e);
+
+    } finally {
+      connectionRepository.closeStatement(statement);
+      connectionRepository.closeConnection(connection);
     }
-
-    connectionRepository.closeStatement(statement);
-    connectionRepository.closeConnection(connection);
   }
 
   public CatTO getCat(String id) throws SQLException, ClassNotFoundException {
@@ -50,23 +56,33 @@ public class CatRepository {
     Statement statement = null;
     ResultSet resultSet = null;
 
-    connection = connectionRepository.openConnection(DB_NAME,DB_USER,DB_PASSWORD);
-    statement = connection.createStatement();
-    resultSet = statement.executeQuery(GET_CAT_QUERY + id);
-
     CatTO cat = new CatTO();
 
-    while (resultSet.next()) {
-      cat.setId(resultSet.getString("id"));
-      cat.setUrl(resultSet.getString("url"));
-      cat.setWidth(resultSet.getInt("width"));
-      cat.setHeight(resultSet.getInt("height"));
+    try {
+      connection = connectionRepository.openConnection(DB_NAME,DB_USER,DB_PASSWORD);
+      statement = connection.createStatement();
+      resultSet = statement.executeQuery(GET_CAT_QUERY + id);
+
+      while (resultSet.next()) {
+        cat.setId(resultSet.getString("id"));
+        cat.setUrl(resultSet.getString("url"));
+        cat.setWidth(resultSet.getInt("width"));
+        cat.setHeight(resultSet.getInt("height"));
+      }
+
+    } catch (Exception e) {
+      this.handleError(e);
+
+    } finally {
+      connectionRepository.closeResultSet(resultSet);
+      connectionRepository.closeStatement(statement);
+      connectionRepository.closeConnection(connection);
     }
 
-    connectionRepository.closeResultSet(resultSet);
-    connectionRepository.closeStatement(statement);
-    connectionRepository.closeConnection(connection);
-
     return cat;
+  }
+
+  public void handleError(Exception e) {
+    connectionRepository.handleError(e);
   }
 }
